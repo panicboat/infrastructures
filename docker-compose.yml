@@ -10,4 +10,5 @@ services:
       - AWS_REGION=ap-northeast-1
     volumes:
       - .:/aws-cdk
+      - ../cdk-common:/cdk-common
     working_dir: /aws-cdk

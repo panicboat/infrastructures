@@ -43,4 +43,4 @@ fi
 cd $INFRA_HOME/$target
 cp .env.$env .env
 cdk bootstrap
-cdk deploy
+cdk deploy '*'
