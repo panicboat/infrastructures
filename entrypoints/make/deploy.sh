@@ -13,6 +13,10 @@ do
       target=${2}
       shift
     ;;
+    --command|-c)
+      cmd=${2}
+      shift
+    ;;
     *)
       echo "[ERROR] Invalid option '${1}'"
       exit 1
@@ -40,7 +44,16 @@ if [ -z "$env" ] || [ ! -f "$INFRA_HOME/$target/.env.$env" ]; then
   done
 fi
 
+if [ -z "$cmd" ]; then
+  while true; do
+    read -p 'What command do you deploy to? (deploy or diff) : ' cmd
+    if [ -n "$cmd" ] && [[ "$cmd" == "deploy" ]] || [[ "$cmd" == "diff" ]]; then
+      break
+    fi
+  done
+fi
+
 cd $INFRA_HOME/$target
 cp .env.$env .env
 cdk bootstrap
-cdk deploy '*'
+cdk $cmd '*'

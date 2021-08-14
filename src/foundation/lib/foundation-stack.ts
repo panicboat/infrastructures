@@ -9,7 +9,23 @@ export class FoundationStack extends cdk.Stack {
     require('dotenv').config();
     new NetworkResources(this, id, {
       projectName: process.env.ProjectName!,
-      cidrBlock : process.env.VpcCidrBlock!,
+      cidrBlock: process.env.VpcCidrBlock!,
+      isFoundation: true,
+      principal: {
+        accountIds: [
+          // set step1
+          process.env.PlatformAccountID!,
+        ],
+        vpcCidrBlock: [
+          // set step1
+          process.env.PlatformVpcCidrBlock!,
+        ],
+        tgwAttachmentIds: [
+          // set step3
+          process.env.PlatformTGWAttachmentID!
+        ],
+      },
+      isReadyTGW: false,
     });
   }
 }

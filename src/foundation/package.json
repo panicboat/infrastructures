@@ -21,7 +21,8 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "^1.117.0",
+    "@aws-cdk/aws-ec2": "1.117.0",
+    "@aws-cdk/aws-ram": "1.117.0",
     "@aws-cdk/core": "1.117.0",
     "cdk-common": "git+ssh://git@github.com/panicboat/cdk-common.git",
     "dotenv": "^10.0.0",

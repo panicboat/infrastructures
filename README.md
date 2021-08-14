@@ -14,6 +14,12 @@ make init TARGET=${TARGET}
 make build
 ```
 
+### Dry Run
+
+```bash
+make diff ENV=${ENV} TARGET=${TARGET}
+```
+
 ### Deploy
 
 ```bash

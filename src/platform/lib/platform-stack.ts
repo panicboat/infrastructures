@@ -9,7 +9,11 @@ export class PlatformStack extends cdk.Stack {
     require('dotenv').config();
     new NetworkResources(this, id, {
       projectName: process.env.ProjectName!,
-      cidrBlock : process.env.VpcCidrBlock!,
+      cidrBlock: process.env.VpcCidrBlock!,
+      principal: {
+        // set step2
+        transitGatewayId: process.env.TransitGatewayId!,
+      },
     });
   }
 }
