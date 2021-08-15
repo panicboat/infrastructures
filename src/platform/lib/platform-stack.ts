@@ -11,7 +11,6 @@ export class PlatformStack extends cdk.Stack {
       projectName: process.env.ProjectName!,
       cidrBlock: process.env.VpcCidrBlock!,
       principal: {
-        // set step2
         transitGatewayId: process.env.TransitGatewayId!,
       },
     });

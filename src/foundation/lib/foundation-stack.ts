@@ -10,22 +10,20 @@ export class FoundationStack extends cdk.Stack {
     new NetworkResources(this, id, {
       projectName: process.env.ProjectName!,
       cidrBlock: process.env.VpcCidrBlock!,
-      isFoundation: true,
       principal: {
         accountIds: [
-          // set step1
+          // Step1 : Add aws account id
           process.env.PlatformAccountID!,
         ],
         vpcCidrBlock: [
-          // set step1
+          // Step1 : Add vpc cidr block
           process.env.PlatformVpcCidrBlock!,
         ],
         tgwAttachmentIds: [
-          // set step3
+          // Step3 : Add tgw attachement id
           process.env.PlatformTGWAttachmentID!
         ],
       },
-      isReadyTGW: false,
     });
   }
 }
