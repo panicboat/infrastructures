@@ -19,7 +19,7 @@ done
 
 if [ -z "$target" ] || [ -d "$INFRA_HOME/$target" ]; then
   while true; do
-    read -p 'What target do you deploy to? : ' target
+    read -p 'What target do you initialize to? : ' target
     if [ -n "$target" ] && ([ ! -d "$INFRA_HOME/$target" ] || [ ! -n "$INFRA_HOME/$target" ]); then
       break
     fi
@@ -28,4 +28,4 @@ fi
 
 mkdir -p $INFRA_HOME/$target && cd $INFRA_HOME/$target
 cdk init --language=typescript
-rm -rf .git
+rm -rf .git README.md

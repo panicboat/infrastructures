@@ -1,8 +1,8 @@
 {
-  "name": "platform",
+  "name": "sandbox",
   "version": "0.1.0",
   "bin": {
-    "platform": "bin/platform.js"
+    "sandbox": "bin/sandbox.js"
   },
   "scripts": {
     "build": "tsc",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@aws-cdk/core": "1.117.0",
+    "@aws-cdk/aws-ec2": "1.117.0",
     "cdk-common": "git+ssh://git@github.com/panicboat/cdk-common.git",
     "dotenv": "^10.0.0",
     "source-map-support": "^0.5.16"
