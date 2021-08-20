@@ -1,5 +1,5 @@
 import * as cdk from '@aws-cdk/core';
-import { NetworkResources } from 'cdk-common/network';
+import { VpcResources } from 'cdk-common/vpc';
 
 export class FoundationStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -7,7 +7,7 @@ export class FoundationStack extends cdk.Stack {
 
     // The code that defines your stack goes here
     require('dotenv').config();
-    new NetworkResources(this, id, {
+    new VpcResources(this, id, {
       projectName: process.env.ProjectName!,
       cidrBlock: process.env.VpcCidrBlock!,
       principal: {
