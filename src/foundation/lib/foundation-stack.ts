@@ -27,6 +27,11 @@ export class FoundationStack extends cdk.Stack {
           // process.env.PlatformTGWAttachmentID!,
         ],
       },
+      endpoints: [
+        { serviceName: 'ssm', privateDnsEnabled: true },
+        { serviceName: 'ssmmessages', privateDnsEnabled: true },
+        { serviceName: 'ec2messages', privateDnsEnabled: true },
+      ],
     });
   }
 }

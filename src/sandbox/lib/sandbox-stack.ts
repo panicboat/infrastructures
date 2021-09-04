@@ -13,6 +13,10 @@ export class SandboxStack extends cdk.Stack {
       principal: {
         transitGatewayId: process.env.TransitGatewayId!,
       },
+      endpoints: [
+        { serviceName: 'ecr.dkr', privateDnsEnabled: true },
+        { serviceName: 'ecr.api', privateDnsEnabled: true },
+      ],
     });
   }
 }
