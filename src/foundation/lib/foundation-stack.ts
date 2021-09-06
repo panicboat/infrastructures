@@ -28,9 +28,9 @@ export class FoundationStack extends cdk.Stack {
         ],
       },
       endpoints: [
-        { serviceName: 'ssm', privateDnsEnabled: true },
-        { serviceName: 'ssmmessages', privateDnsEnabled: true },
-        { serviceName: 'ec2messages', privateDnsEnabled: true },
+        // { serviceName: 'ssm', privateDnsEnabled: true },
+        // { serviceName: 'ssmmessages', privateDnsEnabled: true },
+        // { serviceName: 'ec2messages', privateDnsEnabled: true },
       ],
     });
   }
