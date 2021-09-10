@@ -8,10 +8,10 @@ export class PlatformStack extends cdk.Stack {
     // The code that defines your stack goes here
     require('dotenv').config();
     new VpcResources(this, id, {
-      projectName: process.env.ProjectName!,
-      cidrBlock: process.env.VpcCidrBlock!,
+      projectName: process.env.PROJECT_NAME!,
+      cidrBlock: process.env.VPC_CIDR_BLOCK!,
       principal: {
-        transitGatewayId: process.env.TransitGatewayId!,
+        transitGatewayId: process.env.TRANSIT_GATEWAY_ID!,
       },
     });
   }

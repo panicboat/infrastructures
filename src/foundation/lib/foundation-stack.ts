@@ -8,23 +8,23 @@ export class FoundationStack extends cdk.Stack {
     // The code that defines your stack goes here
     require('dotenv').config();
     new VpcResources(this, id, {
-      projectName: process.env.ProjectName!,
-      cidrBlock: process.env.VpcCidrBlock!,
+      projectName: process.env.PROJECT_NAME!,
+      cidrBlock: process.env.VPC_CIDR_BLOCK!,
       principal: {
         accountIds: [
           // Step1 : Add aws account id
-          // process.env.SandboxAccountID!,
-          // process.env.PlatformAccountID!,
+          // process.env.SANDBOX_ACCOUNT_ID!,
+          // process.env.PLATFORM_ACCOUNT_ID!,
         ],
         vpcCidrBlock: [
           // Step1 : Add vpc cidr block
-          // process.env.SandboxVpcCidrBlock!,
-          // process.env.PlatformVpcCidrBlock!,
+          // process.env.SANDBOX_VPC_CIDR_BLOCK!,
+          // process.env.PLATFORM_VPC_CIDR_BLOCK!,
         ],
         tgwAttachmentIds: [
           // Step3 : Add tgw attachement id
-          // process.env.SandboxTGWAttachmentID!,
-          // process.env.PlatformTGWAttachmentID!,
+          // process.env.SANDBOX_TGW_ATTACH_ID!,
+          // process.env.PLATFORM_TGW_ATTACH_ID!,
         ],
       },
       endpoints: [
