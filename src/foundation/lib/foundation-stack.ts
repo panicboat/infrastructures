@@ -14,17 +14,14 @@ export class FoundationStack extends cdk.Stack {
         accountIds: [
           // Step1 : Add aws account id
           // process.env.SANDBOX_ACCOUNT_ID!,
-          // process.env.PLATFORM_ACCOUNT_ID!,
         ],
         vpcCidrBlock: [
           // Step1 : Add vpc cidr block
           // process.env.SANDBOX_VPC_CIDR_BLOCK!,
-          // process.env.PLATFORM_VPC_CIDR_BLOCK!,
         ],
         tgwAttachmentIds: [
           // Step3 : Add tgw attachement id
           // process.env.SANDBOX_TGW_ATTACH_ID!,
-          // process.env.PLATFORM_TGW_ATTACH_ID!,
         ],
       },
       endpoints: [
