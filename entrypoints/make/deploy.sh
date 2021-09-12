@@ -55,5 +55,6 @@ fi
 
 cd $INFRA_HOME/$target
 cp .env.$env .env
+rm -rf cdk.context.json
 cdk bootstrap
 cdk $cmd '*'
