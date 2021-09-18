@@ -10,10 +10,10 @@ export class SandboxStack extends cdk.Stack {
     new VpcResources(this, id, {
       projectName: process.env.PROJECT_NAME!,
       cidrBlock: process.env.VPC_CIDR_BLOCK!,
-      principal: {
-        transitGatewayId: process.env.TRANSIT_GATEWAY_ID!,
-      },
       endpoints: [
+        // { serviceName: 'ssm', privateDnsEnabled: true },
+        // { serviceName: 'ssmmessages', privateDnsEnabled: true },
+        // { serviceName: 'ec2messages', privateDnsEnabled: true },
         { serviceName: 'ecr.dkr', privateDnsEnabled: true },
         { serviceName: 'ecr.api', privateDnsEnabled: true },
       ],
