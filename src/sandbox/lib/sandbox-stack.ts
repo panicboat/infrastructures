@@ -11,11 +11,9 @@ export class SandboxStack extends cdk.Stack {
       projectName: process.env.PROJECT_NAME!,
       cidrBlock: process.env.VPC_CIDR_BLOCK!,
       endpoints: [
-        // { serviceName: 'ssm', privateDnsEnabled: true },
-        // { serviceName: 'ssmmessages', privateDnsEnabled: true },
-        // { serviceName: 'ec2messages', privateDnsEnabled: true },
-        { serviceName: 'ecr.dkr', privateDnsEnabled: true },
-        { serviceName: 'ecr.api', privateDnsEnabled: true },
+        // { serviceName: 'ssm',         privateDnsEnabled: true, vpcEndpointType: 'Interface' },
+        // { serviceName: 'ssmmessages', privateDnsEnabled: true, vpcEndpointType: 'Interface' },
+        // { serviceName: 'ec2messages', privateDnsEnabled: true, vpcEndpointType: 'Interface' },
       ],
     });
   }
