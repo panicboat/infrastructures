@@ -9,6 +9,11 @@ export class AuditStack extends cdk.Stack {
     require('dotenv').config();
     new AuditResources(this, id, {
       projectName: process.env.PROJECT_NAME!,
+      principal: {
+        primary: {
+          accountId: process.env.PRIMARY_ACCOUNT_ID,
+        }
+      },
     });
   }
 }
