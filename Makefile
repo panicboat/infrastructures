@@ -8,7 +8,7 @@ bash:
 init:
 	docker compose run aws-cdk bash -c 'sh entrypoints/make/init.sh --target $(TARGET)'
 
-diff:
+plan:
 	docker compose run aws-cdk bash -c 'sh entrypoints/make/deploy.sh --target $(TARGET) --environment $(ENV) --command diff'
 
 deploy:

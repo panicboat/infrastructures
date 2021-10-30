@@ -17,7 +17,7 @@ make build
 ### DryRun
 
 ```bash
-make diff ENV=${ENV} TARGET=${TARGET}
+make plan ENV=${ENV} TARGET=${TARGET}
 ```
 
 ### Deploy
