@@ -10,6 +10,10 @@ export class SandboxStack extends cdk.Stack {
     new VpcResources(this, id, {
       projectName: process.env.PROJECT_NAME!,
       cidrBlock: process.env.VPC_CIDR_BLOCK!,
+      endpoints: [
+        { serviceName: 'ecr.dkr', privateDnsEnabled: true,  vpcEndpointType: 'Interface' },
+        { serviceName: 'ecr.api', privateDnsEnabled: true,  vpcEndpointType: 'Interface' },
+      ]
     });
   }
 }
