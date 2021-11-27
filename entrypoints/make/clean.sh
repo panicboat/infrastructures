@@ -8,6 +8,6 @@ do
   do
     cd $v/$i
     echo "========== $i =========="
-    npm install
+    rm -rf node_modules package-lock.json
   done
 done
