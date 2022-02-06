@@ -8,7 +8,7 @@ import { GatewayContainerService } from './appmesh-gateway/ecs';
 import { WebTarget } from './appmesh-gateway/web';
 import { MeshGateway } from './appmesh-gateway/mesh';
 
-export class AppMeshStack extends cdk.Stack {
+export class AppMeshGatewayStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 

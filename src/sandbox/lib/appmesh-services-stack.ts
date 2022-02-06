@@ -6,7 +6,7 @@ import { INamespace, PrivateDnsNamespace } from '@aws-cdk/aws-servicediscovery';
 import { NodeContainerService } from './appmesh-services/ecs';
 import { MeshNode } from './appmesh-services/mesh';
 
-export class AppMeshStack extends cdk.Stack {
+export class AppMeshServicesStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
