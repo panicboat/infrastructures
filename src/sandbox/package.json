@@ -22,10 +22,15 @@
   },
   "dependencies": {
     "@aws-cdk/core": "latest",
-    "@aws-cdk/aws-route53": "latest",
+    "@aws-cdk/aws-appmesh": "latest",
+    "@aws-cdk/aws-autoscaling": "latest",
     "@aws-cdk/aws-certificatemanager": "latest",
     "@aws-cdk/aws-ec2": "latest",
+    "@aws-cdk/aws-ecr": "latest",
+    "@aws-cdk/aws-ecs": "latest",
     "@aws-cdk/aws-elasticloadbalancingv2": "latest",
+    "@aws-cdk/aws-route53": "latest",
+    "@aws-cdk/aws-servicediscovery": "latest",
     "cdk-common": "git+ssh://git@github.com/panicboat/cdk-common.git",
     "dotenv": "^10.0.0",
     "source-map-support": "^0.5.16"
