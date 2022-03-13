@@ -21,21 +21,6 @@ export class DataLakeStack extends cdk.Stack {
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
-    // bucket.addToResourcePolicy(new iam.PolicyStatement({
-    //   effect: iam.Effect.ALLOW,
-    //   actions: [
-    //     "s3:List*",
-    //     "s3:GetObject",
-    //     "s3:PutObject",
-    //     "s3:PutObjectAcl",
-    //     "s3:DeleteObject"
-    //   ],
-    //   resources: [
-    //     bucket.bucketArn,
-    //     bucket.arnForObjects("*"),
-    //   ],
-    //   principals: accountList.filter(v => v.Env === process.env.CDK_ENV).map(account => new iam.AccountPrincipal(account.AccountId)),
-    // }));
 
     new glue.Database(this, `DataLake${layer}Database`, {
       databaseName: `data-lake-${layer}`,
