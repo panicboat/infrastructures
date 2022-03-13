@@ -73,9 +73,6 @@ export class ElsFargateStack extends cdk.Stack {
       new DashboardService(cdk8sApp, 'dashboard-chart', {})
     );
 
-    this.addProfile(`excalibur`, cluster, defaultProfileRole);
-    this.addProfile(`argocd`, cluster, defaultProfileRole);
-
     new cdk.CfnOutput(this, 'eks-fargate-master-role-arn', {
       exportName: 'EksMasterRoleArn',
       value: masterRole.roleArn,
