@@ -3,155 +3,99 @@ import * as cdk8s from 'cdk8s';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as eks from '@aws-cdk/aws-eks';
 import * as iam from '@aws-cdk/aws-iam';
-import * as s3 from '@aws-cdk/aws-s3';
 
-import { AwsLoadBalancerController } from './eks-fargate/aws-loadbalancer-controller';
-import { NginxService } from './eks-fargate/nginx-service';
-import { EksFargateLogging } from './eks-fargate/eks-fargate-logging'
+import { AwsLoadBalancerController } from './eks-fargate/aws-load-balancer-controller';
+import { DashboardService } from './eks-fargate/dashboard';
+import { EksAdmin } from './eks-fargate/eks-admin';
 
-export class CdkEksFargateStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
-        super(scope, id, props);
+export class ElsFargateStack extends cdk.Stack {
 
-        const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { vpcName: 'main' });
-        const sg = ec2.SecurityGroup.fromLookupByName(this, `SecurityGroup`, `main`, vpc);
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
-        // cluster master role
-        const masterRole = new iam.Role(this, `MasterRole`, {
-            roleName: `${process.env.PROJECT_NAME}MasterRole`,
-            assumedBy: new iam.AccountRootPrincipal(),
-        });
+    require('dotenv').config();
+    const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { vpcName: 'main' });
+    const sg = ec2.SecurityGroup.fromLookupByName(this, `SecurityGroup`, `main`, vpc);
 
-        const clusterRole = new iam.Role(this, `ClusterRole`, {
-            roleName: `${process.env.PROJECT_NAME}ClusterRole`,
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEKSClusterPolicy'),
-            ],
-            assumedBy: new iam.ServicePrincipal('eks.amazonaws.com'),
-        });
+    // cluster master role
+    const masterRole = new iam.Role(this, `MasterRole`, {
+      roleName: `MasterRole-${process.env.PROJECT_NAME}`,
+      assumedBy: new iam.AccountRootPrincipal(),
+    });
 
-        const defaultProfileRole = new iam.Role(this, `defaultProfileRole`, {
-            roleName: `${process.env.PROJECT_NAME}DefaultProfileRole`,
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEKSFargatePodExecutionRolePolicy'),
-            ],
-            assumedBy: new iam.ServicePrincipal('eks-fargate-pods.amazonaws.com'),
-        });
+    const clusterRole = new iam.Role(this, `ClusterRole`, {
+      roleName: `ClusterRole-${process.env.PROJECT_NAME}`,
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEKSClusterPolicy'),
+      ],
+      assumedBy: new iam.ServicePrincipal('eks.amazonaws.com'),
+    });
 
-        // Create a EKS cluster with Fargate profile.
-        const cluster = new eks.FargateCluster(this, `FargateCluster`, {
-            version: eks.KubernetesVersion.V1_21,
-            clusterName: process.env.PROJECT_NAME,
-            clusterHandlerSecurityGroup: sg,
-            defaultProfile: { selectors: [ { namespace: 'default' }, { namespace: 'kube-system' } ], fargateProfileName: `default-profile`, podExecutionRole: defaultProfileRole },
-            endpointAccess: eks.EndpointAccess.PRIVATE,
-            mastersRole: masterRole,
-            outputClusterName: true,
-            outputConfigCommand: true,
-            outputMastersRoleArn: true,
-            placeClusterHandlerInVpc: true,
-            role: clusterRole,
-            securityGroup: sg,
-            vpc: vpc,
-            vpcSubnets: [{ subnetType: ec2.SubnetType.PRIVATE_WITH_NAT }],
-        });
+    const defaultProfileRole = new iam.Role(this, `defaultProfileRole`, {
+      roleName: `DefaultProfileRole-${process.env.PROJECT_NAME}`,
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEKSFargatePodExecutionRolePolicy'),
+      ],
+      assumedBy: new iam.ServicePrincipal('eks-fargate-pods.amazonaws.com'),
+    });
 
-        // Deploy AWS LoadBalancer Controller onto EKS.
-        new AwsLoadBalancerController(this, 'aws-loadbalancer-controller', {
-            eksCluster: cluster,
-        });
+    // Create a EKS cluster with Fargate profile.
+    const cluster = new eks.FargateCluster(this, `FargateCluster`, {
+      version: eks.KubernetesVersion.V1_21,
+      clusterName: process.env.PROJECT_NAME,
+      clusterHandlerSecurityGroup: sg,
+      defaultProfile: { selectors: [{ namespace: 'default' }, { namespace: 'kube-system' }], fargateProfileName: `default-profile`, podExecutionRole: defaultProfileRole },
+      endpointAccess: eks.EndpointAccess.PRIVATE,
+      mastersRole: masterRole,
+      outputClusterName: true,
+      outputConfigCommand: true,
+      outputMastersRoleArn: true,
+      placeClusterHandlerInVpc: true,
+      role: clusterRole,
+      securityGroup: sg,
+      vpc: vpc,
+      vpcSubnets: [{ subnetType: ec2.SubnetType.PRIVATE_WITH_NAT }],
+    });
 
-        // Create the cdk8s app.
-        const cdk8sApp = new cdk8s.App();
+    // Deploy AWS LoadBalancer Controller onto EKS.
+    new AwsLoadBalancerController(this, 'aws-loadbalancer-controller', {
+      eksCluster: cluster,
+    });
 
-        // Now we add the cdk8s chart for the actual application workload, here we take the nginx deployment & service as example.
-        //
-        // First we create an IAM role, which will be associated with the K8S service account for the actual k8s app. Then we
-        // can grant permission to that IAM role so that the actual K8S app can access AWS resources as required.
-        //
-        // Please note the nginx app itself does not really need any access to AWS resources, however we still include the codes of
-        // setting up IAM role and K8S service account so you can reuse them in your own use case where the K8S app does need to access
-        // AWS resources, such as s3 buckets.
-        //
-        const k8sAppNameSpace = 'nginx';
-        const k8sIngressName = 'api-ingress';
-        const k8sAppServiceAccount = 'sa-nginx';
-        const conditions = new cdk.CfnJson(this, 'ConditionJson', {
-            value: {
-                [`${cluster.clusterOpenIdConnectIssuer}:aud`]: 'sts.amazonaws.com',
-                [`${cluster.clusterOpenIdConnectIssuer}:sub`]: `system:serviceaccount:${k8sAppNameSpace}:${k8sAppServiceAccount}`,
-            },
-        });
+    // Create the cdk8s app.
+    const cdk8sApp = new cdk8s.App();
 
-        const iamPrinciple = new iam.FederatedPrincipal(
-            cluster.openIdConnectProvider.openIdConnectProviderArn,
-            {},
-            'sts:AssumeRoleWithWebIdentity'
-        ).withConditions({
-            StringEquals: conditions,
-        });
-        const iamRoleForK8sSa = new iam.Role(this, 'nginx-app-sa-role', {
-            assumedBy: iamPrinciple,
-        });
+    const admin = cluster.addCdk8sChart('admin-chart',
+      new EksAdmin(cdk8sApp, 'eks-admin-chart', {})
+    );
 
-        // Grant the IAM role S3 permission as an example to show how you can assign Fargate Pod permissions to access AWS resources
-        // even though nginx Pod itself does not need to access AWS resources, such as S3.
-        const example_s3_bucket = new s3.Bucket(
-            this,
-            'S3BucketToShowGrantPermission',
-            {
-                encryption: s3.BucketEncryption.KMS_MANAGED,
-            }
-        );
-        example_s3_bucket.grantRead(iamRoleForK8sSa);
+    const dashboard = cluster.addCdk8sChart('dashboard-service',
+      new DashboardService(cdk8sApp, 'dashboard-chart', {})
+    );
 
-        // Apart from the permission to access the S3 bucket above, you can also grant permissions of other AWS resources created in this CDK app to such AWS IAM role.
-        // Then in the follow-up CDK8S Chart, we will create a K8S Service Account to associate with this AWS IAM role and a nginx K8S deployment to use the K8S SA.
-        // As a result, the nginx Pod will have the fine-tuned AWS permissions defined in this AWS IAM role.
+    this.addProfile(`excalibur`, cluster, defaultProfileRole);
+    this.addProfile(`argocd`, cluster, defaultProfileRole);
 
-        // Now create a Fargate Profile to host customer app which hosting Pods belonging to nginx namespace.
-        const customerAppFargateProfile = cluster.addFargateProfile(
-            'customer-app-profile',
-            {
-                selectors: [{ namespace: k8sAppNameSpace }],
-                subnetSelection: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT },
-                vpc: cluster.vpc,
-            }
-        );
+    new cdk.CfnOutput(this, 'eks-fargate-master-role-arn', {
+      exportName: 'EksMasterRoleArn',
+      value: masterRole.roleArn,
+    });
+    new cdk.CfnOutput(this, 'eks-fargate-security-group-id', {
+      exportName: 'EksKubectlSecurityGroupId',
+      value: sg.securityGroupId,
+    });
+    new cdk.CfnOutput(this, 'eks-fargate-kubectl-private-subnet-ids', {
+      exportName: 'EksKubectlPrivateSubnetIds',
+      value: cluster.kubectlPrivateSubnets?.map(s => s.subnetId).join(",") as string,
+    });
+  }
 
-        const loggingIamPolicy = new iam.ManagedPolicy(this, 'eks-fargate-logging-iam-policy', {
-            statements: [
-              new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: [
-                    'logs:CreateLogStream',
-                    'logs:CreateLogGroup',
-                    'logs:DescribeLogStreams',
-                    'logs:PutLogEvents'
-                ],
-                resources: ['*'],
-              }),
-            ],
-        });
-        customerAppFargateProfile.podExecutionRole.addManagedPolicy(loggingIamPolicy);
-
-        const loggingChart = cluster.addCdk8sChart(
-            'eks-fargate-logging',
-            new EksFargateLogging(cdk8sApp, 'eks-fargate-logging-chart')
-        );
-
-        loggingChart.node.addDependency(customerAppFargateProfile);
-
-        const k8sAppChart = cluster.addCdk8sChart(
-            'nginx-app-service',
-            new NginxService(cdk8sApp, 'nginx-app-chart', {
-                iamRoleForK8sSaArn: iamRoleForK8sSa.roleArn,
-                nameSpace: k8sAppNameSpace,
-                ingressName: k8sIngressName,
-                serviceAccountName: k8sAppServiceAccount,
-            })
-        );
-
-        k8sAppChart.node.addDependency(customerAppFargateProfile);
-    }
+  private addProfile(projectName: string, cluster: eks.FargateCluster, podExecutionRole: iam.IRole) {
+    new eks.FargateProfile(this, `FargateProfile-${projectName}`, {
+      cluster: cluster,
+      selectors: [{ namespace: projectName }],
+      fargateProfileName: `${projectName}-profile`,
+      podExecutionRole: podExecutionRole,
+    });
+  }
 }
