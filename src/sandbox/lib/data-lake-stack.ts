@@ -8,12 +8,14 @@ export class DataLakeStack extends cdk.Stack {
     super(scope, id, props);
 
     require('dotenv').config();
-    this.createDataLake(`raw`);
-    this.createDataLake(`intermediate`);
-    this.createDataLake(`structuralization`);
+    this.createDataLake(`source`, false);
+    this.createDataLake(`raw`, true);
+    this.createDataLake(`intermediate`, true);
+    this.createDataLake(`structuralization`, true);
+    this.createDataLake(`outputs`, false);
   }
 
-  private createDataLake(layer: string) {
+  private createDataLake(layer: string, isDatabase: boolean) {
     const bucket = new s3.Bucket(this, `DataLake${layer}Bucket`, {
       bucketName: `${this.account}-data-lake-${layer}`,
       versioned: false,
@@ -22,9 +24,11 @@ export class DataLakeStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
-    new glue.Database(this, `DataLake${layer}Database`, {
-      databaseName: `data-lake-${layer}`,
-      locationUri: `s3://${bucket.bucketName}`
-    });
+    if (isDatabase) {
+      new glue.Database(this, `DataLake${layer}Database`, {
+        databaseName: `data_lake_${layer}`,
+        locationUri: `s3://${bucket.bucketName}`
+      });
+    }
   }
 }
