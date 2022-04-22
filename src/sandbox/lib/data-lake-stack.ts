@@ -12,6 +12,7 @@ export class DataLakeStack extends cdk.Stack {
     this.createDataLake(`raw`, true);
     this.createDataLake(`intermediate`, true);
     this.createDataLake(`structuralization`, true);
+    this.createDataLake(`finalize`, true);
     this.createDataLake(`outputs`, false);
   }
 
