@@ -29,14 +29,14 @@
     "@aws-cdk/aws-ecs": "latest",
     "@aws-cdk/aws-eks": "latest",
     "@aws-cdk/aws-elasticloadbalancingv2": "latest",
+    "@aws-cdk/aws-glue": "latest",
     "@aws-cdk/aws-iam": "latest",
     "@aws-cdk/aws-route53": "latest",
     "@aws-cdk/aws-route53-targets": "latest",
+    "@aws-cdk/aws-s3": "latest",
     "@aws-cdk/aws-servicediscovery": "latest",
     "@aws-cdk/core": "latest",
     "cdk-common": "git+ssh://git@github.com/panicboat/cdk-common.git",
-    "cdk8s": "latest",
-    "cdk8s-plus-21": "^1.0.0-beta.82",
     "dotenv": "^10.0.0",
     "source-map-support": "^0.5.16"
   }
