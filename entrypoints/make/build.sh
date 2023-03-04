@@ -14,7 +14,6 @@ do
       exit 1
     ;;
   esac
-  shift
 done
 
 for v in "$INFRA_HOME"
