@@ -11,7 +11,7 @@ make init TARGET=${TARGET}
 ### Build
 
 ```bash
-make build
+make build TARGET=${TARGET}
 ```
 
 ### DryRun

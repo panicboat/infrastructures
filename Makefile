@@ -1,6 +1,6 @@
 build:
 	docker compose build
-	docker compose run aws-cdk bash -c 'sh entrypoints/make/build.sh'
+	docker compose run aws-cdk bash -c 'sh entrypoints/make/build.sh --target $(TARGET)'
 
 bash:
 	docker compose run aws-cdk bash

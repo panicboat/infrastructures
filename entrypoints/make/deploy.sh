@@ -5,6 +5,10 @@ INFRA_HOME=$SCRIPT_DIR/../../src
 while [ $# -gt 0 ];
 do
   case ${1} in
+    --bootstrap|-b)
+      init=${2}
+      shift
+    ;;
     --environment|-e)
       env=${2}
       shift
@@ -56,5 +60,7 @@ fi
 cd $INFRA_HOME/$target
 cp .env.$env .env
 rm -rf cdk.context.json
-cdk bootstrap
+if [ -z "$init" ]; then
+  cdk bootstrap
+fi
 cdk $cmd '*'
