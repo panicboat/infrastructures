@@ -26,6 +26,7 @@ do
       exit 1
     ;;
   esac
+  shift
 done
 
 if [ -z "$target" ] || [ ! -d "$INFRA_HOME/$target" ]; then
@@ -59,7 +60,7 @@ fi
 cd $INFRA_HOME/$target
 cp .env.$env .env
 rm -rf cdk.context.json
-if [ -z "$init" ]; then
+if [ -n "$init" ]; then
   cdk bootstrap
 fi
 cdk $cmd '*'

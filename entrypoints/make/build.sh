@@ -14,7 +14,18 @@ do
       exit 1
     ;;
   esac
+  shift
 done
+
+if [ -n "$target" ] && [ ! -d "$INFRA_HOME/$target" ]; then
+  while true; do
+    echo $INFRA_HOME/$target
+    read -p 'What target do you deploy to? : ' target
+    if [ -n "$target" ] && [ -d "$INFRA_HOME/$target" ]; then
+      break
+    fi
+  done
+fi
 
 for v in "$INFRA_HOME"
 do
@@ -23,7 +34,7 @@ do
     if [ -z "$target" ] || [ "$target" = "$i" ]; then
       cd $v/$i
       echo "========== $i =========="
-      npm install
+      yarn install
     fi
   done
 done
