@@ -9,32 +9,24 @@ export class SandboxStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     new vpc.Vpc(this, id, {
+      maxAzs: 3,
       subnetConfiguration: [
         {
-          name: 'Public1',
-          subnetType: ec2.SubnetType.PUBLIC
+          name: 'Public',
+          subnetType: ec2.SubnetType.PUBLIC,
+          cidrMask: 24,
         },
         {
-          name: 'Public2',
-          subnetType: ec2.SubnetType.PUBLIC
+          name: 'Private',
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+          cidrMask: 24,
         },
         {
-          name: 'Private1',
-          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
+          name: 'Isolated',
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          cidrMask: 24,
         },
-        {
-          name: 'Private2',
-          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
-        },
-        {
-          name: 'Isolated1',
-          subnetType: ec2.SubnetType.PRIVATE_ISOLATED
-        },
-        {
-          name: 'Isolated2',
-          subnetType: ec2.SubnetType.PRIVATE_ISOLATED
-        },
-      ]
+      ],
     })
   }
 }
