@@ -9,7 +9,7 @@ export class SandboxStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     new vpc.Vpc(this, id, {
-      maxAzs: 3,
+      availabilityZones: ['ap-northeast-1a', 'ap-northeast-1c', 'ap-northeast-1d'],
       subnetConfiguration: [
         {
           name: 'Public',
