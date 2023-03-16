@@ -804,7 +804,7 @@ aws-cdk-lib@^2.67.0:
     semver "^7.3.8"
     yaml "1.10.2"
 
-"aws-cdk-modules@file:../../../../../cdk-common":
+"aws-cdk-modules@file:../../../aws-cdk-modules":
   version "1.0.0"
   dependencies:
     aws-cdk-lib "^2.67.0"

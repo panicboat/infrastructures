@@ -10,4 +10,5 @@ services:
       - AWS_REGION=ap-northeast-1
     volumes:
       - .:/src/bin/app
+      - $HOME/GitHub/panicboat/aws-cdk-modules:/src/bin/aws-cdk-modules
     working_dir: /src/bin/app
