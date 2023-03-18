@@ -34,7 +34,7 @@ do
     if [ -z "$target" ] || [ "$target" = "$i" ]; then
       cd $v/$i
       echo "========== $i =========="
-      npm install
+      yarn install
     fi
   done
 done
