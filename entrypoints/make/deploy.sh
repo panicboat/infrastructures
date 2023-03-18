@@ -59,7 +59,7 @@ fi
 
 cd $INFRA_HOME/$target
 cp .env.$env .env
-rm -rf cdk.context.json
+rm -rf cdk.out cdk.context.json
 if [ -n "$init" ]; then
   cdk bootstrap
 fi
