@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.67.0",
-    "aws-cdk-modules": "file:/src/bin/aws-cdk-modules",
+    "aws-cdk-modules": "file:../../../aws-cdk-modules",
     "constructs": "^10.1.267",
     "dotenv": "^16.0.3",
     "source-map-support": "^0.5.21"
