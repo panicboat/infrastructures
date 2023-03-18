@@ -14,7 +14,7 @@ do
       exit 1
     ;;
   esac
-  shift
+  ${1+shift};
 done
 
 if [ -n "$target" ] && [ ! -d "$INFRA_HOME/$target" ]; then
@@ -34,7 +34,7 @@ do
     if [ -z "$target" ] || [ "$target" = "$i" ]; then
       cd $v/$i
       echo "========== $i =========="
-      yarn install
+      npm install
     fi
   done
 done
