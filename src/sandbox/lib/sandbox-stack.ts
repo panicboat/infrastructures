@@ -6,9 +6,11 @@ import { Construct } from 'constructs';
 require('dotenv').config();
 
 export class SandboxStack extends cdk.Stack {
+  public readonly vpc!: ec2.IVpc;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    new vpc.Vpc(this, 'sandbox', {
+    const resource = new vpc.Vpc(this, 'sandbox', {
       availabilityZones: cdk.Stack.of(this).availabilityZones.sort().slice(0, 2),
       subnetConfiguration: [
         {
@@ -27,6 +29,7 @@ export class SandboxStack extends cdk.Stack {
           cidrMask: 24,
         },
       ],
-    })
+    });
+    this.vpc = resource.vpc;
   }
 }

@@ -13,6 +13,6 @@ const env = {
 
 const app = new cdk.App();
 const vpc = new SandboxStack(app, 'SandboxStack', { env, });
-const eks = new SandboxEksStack(app, 'SandboxEksStack', { env, });
+const eks = new SandboxEksStack(app, 'SandboxEksStack', { env, vpc: vpc.vpc });
 eks.addDependency(vpc);
 app.synth()
