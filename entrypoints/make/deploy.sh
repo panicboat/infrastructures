@@ -5,20 +5,20 @@ INFRA_HOME=$SCRIPT_DIR/../../src
 while [ $# -gt 0 ];
 do
   case ${1} in
-    --bootstrap|-b)
-      init=${2}
+    --command|-c)
+      cmd=${2}
       shift
     ;;
     --environment|-e)
       env=${2}
       shift
     ;;
-    --target|-t)
-      target=${2}
+    --profile|-p)
+      profile=${2}
       shift
     ;;
-    --command|-c)
-      cmd=${2}
+    --target|-t)
+      target=${2}
       shift
     ;;
     *)
@@ -29,11 +29,10 @@ do
   shift
 done
 
-if [ -z "$target" ] || [ ! -d "$INFRA_HOME/$target" ]; then
+if [ -z "$cmd" ]; then
   while true; do
-    echo $INFRA_HOME/$target
-    read -p 'What target do you deploy to? : ' target
-    if [ -n "$target" ] && [ -d "$INFRA_HOME/$target" ]; then
+    read -p 'What command do you deploy to? (deploy or diff) : ' cmd
+    if [ -n "$cmd" ] && [[ "$cmd" == "deploy" ]] || [[ "$cmd" == "diff" ]]; then
       break
     fi
   done
@@ -48,10 +47,16 @@ if [ -z "$env" ] || [ ! -f "$INFRA_HOME/$target/.env.$env" ]; then
   done
 fi
 
-if [ -z "$cmd" ]; then
+if [ -n "$profile" ]; then
+  # TODO: check profile
+  profile_option="--profile $profile"
+fi
+
+if [ -z "$target" ] || [ ! -d "$INFRA_HOME/$target" ]; then
   while true; do
-    read -p 'What command do you deploy to? (deploy or diff) : ' cmd
-    if [ -n "$cmd" ] && [[ "$cmd" == "deploy" ]] || [[ "$cmd" == "diff" ]]; then
+    echo $INFRA_HOME/$target
+    read -p 'What target do you deploy to? : ' target
+    if [ -n "$target" ] && [ -d "$INFRA_HOME/$target" ]; then
       break
     fi
   done
@@ -61,6 +66,7 @@ cd $INFRA_HOME/$target
 cp .env.$env .env
 rm -rf cdk.out cdk.context.json
 if [ -n "$init" ]; then
-  cdk bootstrap
+  cdk bootstrap $profile_option
+else
+  cdk $cmd '*' $profile_option
 fi
-cdk $cmd '*'

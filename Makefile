@@ -7,12 +7,14 @@ build:
 bash:
 	docker compose run --rm app bash
 
+bootstrap:
+	docker compose run --rm app bash -c 'sh entrypoints/make/deploy.sh --profile $(PROFILE) --target $(TARGET) --command bootstrap'
+
 plan:
-	docker compose run --rm app bash -c 'cd src/$(TARGET) && yarn upgrade aws-cdk-modules'
-	docker compose run --rm app bash -c 'sh entrypoints/make/deploy.sh --target $(TARGET) --environment $(ENV) --command diff'
+	docker compose run --rm app bash -c 'sh entrypoints/make/deploy.sh --profile $(PROFILE) --target $(TARGET) --environment $(ENV) --command diff'
 
 deploy:
-	docker compose run --rm app bash -c 'sh entrypoints/make/deploy.sh --target $(TARGET) --environment $(ENV) --command deploy'
+	docker compose run --rm app bash -c 'sh entrypoints/make/deploy.sh --profile $(PROFILE) --target $(TARGET) --environment $(ENV) --command deploy'
 
 clean:
 	docker compose run --rm app bash -c 'sh entrypoints/make/clean.sh'
