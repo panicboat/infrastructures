@@ -69,5 +69,5 @@ make deploy
 ### Forced package updates
 
 ```bash
-docker compose run --rm app bash -c 'cd src/$(TARGET) && yarn upgrade aws-cdk-modules'
+docker compose run --rm app bash -c 'cd src/sandbox && yarn upgrade aws-cdk-modules'
 ```
