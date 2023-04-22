@@ -32,10 +32,18 @@ done
 if [ -z "$cmd" ]; then
   while true; do
     read -p 'What command do you deploy to? (deploy or diff) : ' cmd
-    if [ -n "$cmd" ] && [[ "$cmd" == "deploy" ]] || [[ "$cmd" == "diff" ]]; then
-      break
+    if [ -n "$cmd"]; then
+      commands=("bootstrap" "diff" "deploy" "destroy")
+      if printf '%s\n' "${commands[@]}" | grep -qx "$cmd"; then
+        break
+      fi
     fi
   done
+fi
+if [ "$cmd" == "bootstrap" ]; then
+  command_option="$cmd"
+else
+  command_option="$cmd '*' --force"
 fi
 
 if [ -z "$env" ] || [ ! -f "$INFRA_HOME/$target/.env.$env" ]; then
@@ -65,8 +73,4 @@ fi
 cd $INFRA_HOME/$target
 cp .env.$env .env
 rm -rf cdk.out cdk.context.json
-if [ -n "$init" ]; then
-  cdk bootstrap $profile_option
-else
-  cdk $cmd '*' --force $profile_option
-fi
+cdk $command_option $profile_option

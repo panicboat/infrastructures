@@ -2,12 +2,18 @@
 
 ## Usage
 
+### Preparation
+
+First, set the environment variables for Makefile.
+
+[.env.makefile](.env.makefile)
+
 ### Initialize
 
 Creates a new CDK project in the current directory from a specified template
 
 ```bash
-make init TARGET=${TARGET}
+make init
 ```
 
 ### Build
@@ -15,7 +21,7 @@ make init TARGET=${TARGET}
 Install the npm packages.
 
 ```bash
-make build TARGET=${TARGET}
+make build
 ```
 
 ### Bootstrap
@@ -23,7 +29,7 @@ make build TARGET=${TARGET}
 Deploys the CDK Toolkit staging stack.
 
 ```bash
-make bootstrap PROFILE=${PROFILE} TARGET=${TARGET}
+make bootstrap
 ```
 
 ### DryRun
@@ -31,7 +37,7 @@ make bootstrap PROFILE=${PROFILE} TARGET=${TARGET}
 Compares the specified stack and its dependencies with the deployed stacks or a local CloudFormation template.
 
 ```bash
-make plan ENV=${ENV} PROFILE=${PROFILE} TARGET=${TARGET}
+make plan
 ```
 
 ### Deploy
@@ -39,7 +45,7 @@ make plan ENV=${ENV} PROFILE=${PROFILE} TARGET=${TARGET}
 Deploys one or more specified stacks.
 
 ```bash
-make deploy ENV=${ENV} PROFILE=${PROFILE} TARGET=${TARGET}
+make deploy
 ```
 
 ### Forced package updates
