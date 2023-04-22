@@ -68,5 +68,5 @@ rm -rf cdk.out cdk.context.json
 if [ -n "$init" ]; then
   cdk bootstrap $profile_option
 else
-  cdk $cmd '*' $profile_option
+  cdk $cmd '*' --force $profile_option
 fi
