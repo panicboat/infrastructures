@@ -8,6 +8,6 @@ do
   do
     cd $v/$i
     echo "========== $i =========="
-    rm -rf node_modules package-lock.json
+    rm -rf cdk.out node_modules .env cdk.context.json yarn.lock
   done
 done

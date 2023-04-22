@@ -1,19 +1,35 @@
-import * as cdk from '@aws-cdk/core';
-import { VpcResources } from 'cdk-common/vpc';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as vpc from 'aws-cdk-modules/vpc';
+import { Construct } from 'constructs';
+
+require('dotenv').config();
 
 export class SandboxStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+  public readonly vpc!: ec2.IVpc;
 
-    // The code that defines your stack goes here
-    require('dotenv').config();
-    new VpcResources(this, id, {
-      projectName: process.env.PROJECT_NAME!,
-      cidrBlock: process.env.VPC_CIDR_BLOCK!,
-      endpoints: [
-        { serviceName: 'ecr.dkr', privateDnsEnabled: true,  vpcEndpointType: 'Interface' },
-        { serviceName: 'ecr.api', privateDnsEnabled: true,  vpcEndpointType: 'Interface' },
-      ]
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+    const resource = new vpc.Vpc(this, 'sandbox', {
+      availabilityZones: cdk.Stack.of(this).availabilityZones.sort().slice(0, 2),
+      subnetConfiguration: [
+        {
+          name: 'Public',
+          subnetType: ec2.SubnetType.PUBLIC,
+          cidrMask: 24,
+        },
+        {
+          name: 'Private',
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+          cidrMask: 24,
+        },
+        {
+          name: 'Isolated',
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          cidrMask: 24,
+        },
+      ],
     });
+    this.vpc = resource.vpc;
   }
 }

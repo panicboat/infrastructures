@@ -29,4 +29,4 @@ fi
 mkdir -p $INFRA_HOME/$target && cd $INFRA_HOME/$target
 cdk init --language=typescript
 rm -rf .git README.md
-touch .env.prd .env.dev
+touch .env.production .env.develop
