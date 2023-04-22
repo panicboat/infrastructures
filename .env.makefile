@@ -1,3 +1,3 @@
 ENV=develop
 TARGET=sandbox
-PROFILE=
+PROFILE=sandbox
