@@ -68,6 +68,8 @@ make deploy
 
 ### Forced package updates
 
+`src/sandbox` is the home of any CDK project.
+
 ```bash
 docker compose run --rm app bash -c 'cd src/sandbox && yarn upgrade aws-cdk-modules'
 ```
