@@ -16,3 +16,7 @@ const vpc = new SandboxStack(app, 'SandboxStack', { env, });
 const eks = new SandboxEksStack(app, 'SandboxEksStack', { env, vpc: vpc.vpc });
 eks.addDependency(vpc);
 app.synth()
+
+cdk.Tags.of(app).add('owner', 'panicboat');
+cdk.Tags.of(vpc).add('service', 'sandbox');
+cdk.Tags.of(eks).add('service', 'kubernetes');
