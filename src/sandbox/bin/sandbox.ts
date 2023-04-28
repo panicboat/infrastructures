@@ -18,5 +18,4 @@ eks.addDependency(vpc);
 app.synth()
 
 cdk.Tags.of(app).add('owner', 'panicboat');
-cdk.Tags.of(vpc).add('service', 'sandbox');
-cdk.Tags.of(eks).add('service', 'kubernetes');
+cdk.Tags.of(app).add('environment', 'sandbox');
