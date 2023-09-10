@@ -6,8 +6,8 @@ import { SandboxEksStack } from '../lib/sandbox-eks-stack';
 import { config as DevProps } from '../env/develop';
 
 const app = new cdk.App();
-const key = app.node.tryGetContext('environment');
-const props = getProperties(key);
+const environment = app.node.tryGetContext('environment');
+const props = getProperties(environment);
 const env = {
   account: props.account,
   region: props.region,
@@ -18,7 +18,7 @@ eks.addDependency(vpc);
 app.synth()
 
 cdk.Tags.of(app).add('owner', 'panicboat');
-cdk.Tags.of(app).add('environment', 'sandbox');
+cdk.Tags.of(app).add('environment', environment);
 
 function getProperties(key: string) {
   switch (key) {
