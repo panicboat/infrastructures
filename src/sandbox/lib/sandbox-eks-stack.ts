@@ -2,7 +2,6 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as k8s from 'aws-cdk-modules/eks';
 import { Construct } from 'constructs';
-import { KubectlV27Layer } from '@aws-cdk/lambda-layer-kubectl-v27';
 
 export interface Props extends cdk.StackProps {
   vpc: ec2.IVpc
