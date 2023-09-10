@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as k8s from 'aws-cdk-modules/eks';
 import { Construct } from 'constructs';
+import { KubectlV27Layer } from '@aws-cdk/lambda-layer-kubectl-v27';
 
 export interface Props extends cdk.StackProps {
   vpc: ec2.IVpc
@@ -16,10 +17,6 @@ export class SandboxEksStack extends cdk.Stack {
       endpointAccess: cdk.aws_eks.EndpointAccess.PUBLIC_AND_PRIVATE,
       version: cdk.aws_eks.KubernetesVersion.V1_27,
       vpc: props.vpc
-    });
-
-    const k8sKarpenter = new k8s.Karpenter(this, 'Karpenter-Sandbox', {
-      cluster: k8sCluster.cluster,
     });
   }
 }
