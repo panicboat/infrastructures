@@ -3,14 +3,15 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as vpc from 'aws-cdk-modules/vpc';
 import { Construct } from 'constructs';
 
-require('dotenv').config();
+export interface Props extends cdk.StackProps {
+}
 
 export class SandboxStack extends cdk.Stack {
   public readonly vpc!: ec2.IVpc;
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: Props) {
     super(scope, id, props);
-    const resource = new vpc.Vpc(this, 'sandbox', {
+    const resource = new vpc.Vpc(this, 'Sandbox', {
       availabilityZones: cdk.Stack.of(this).availabilityZones.sort().slice(0, 2),
       subnetConfiguration: [
         {

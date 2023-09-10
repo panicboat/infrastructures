@@ -43,16 +43,7 @@ fi
 if [ "$cmd" == "bootstrap" ]; then
   command_option="$cmd"
 else
-  command_option="$cmd '*' --force"
-fi
-
-if [ -z "$env" ] || [ ! -f "$INFRA_HOME/$target/.env.$env" ]; then
-  while true; do
-    read -p 'What environment do you deploy to? : ' env
-    if [ -n "$env" ] && [ -f "$INFRA_HOME/$target/.env.$env" ]; then
-      break
-    fi
-  done
+  command_option="$cmd '*' --force --context environment=$env"
 fi
 
 if [ -n "$profile" ]; then
@@ -71,6 +62,6 @@ if [ -z "$target" ] || [ ! -d "$INFRA_HOME/$target" ]; then
 fi
 
 cd $INFRA_HOME/$target
-cp .env.$env .env
 rm -rf cdk.out cdk.context.json
+echo "cdk $command_option $profile_option"
 cdk $command_option $profile_option

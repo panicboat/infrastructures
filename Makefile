@@ -1,10 +1,10 @@
-include .env.makefile
+include makefile.env
 
 init:
 	docker compose run --rm app bash -c 'bash entrypoints/make/init.sh --target $(TARGET)'
 
 build:
-	docker compose run --rm app bash -c 'bash entrypoints/make/build.sh --target $(TARGET)'
+	docker compose run --rm app bash -c 'bash entrypoints/make/build.sh --target $(TARGET) && cd src/$(TARGET) && yarn upgrade'
 
 bash:
 	docker compose run --rm app bash
