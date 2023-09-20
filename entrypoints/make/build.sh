@@ -34,7 +34,7 @@ do
     if [ -z "$target" ] || [ "$target" = "$i" ]; then
       cd $v/$i
       echo "========== $i =========="
-      yarn install
+      yarn install --network-concurrency 1
     fi
   done
 done
