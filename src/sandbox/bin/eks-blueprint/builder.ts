@@ -8,6 +8,7 @@ export interface Props extends cdk.StackProps {
 }
 
 export class EksBuilder implements IEksBuilder {
+  // https://github.com/aws-quickstart/cdk-eks-blueprints/tree/main/examples
   constructor(scope: Construct, id: string, props: Props) {
   }
 }
