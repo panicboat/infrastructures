@@ -19,8 +19,10 @@
     "typescript": "~4.9.5"
   },
   "dependencies": {
+    "@aws-quickstart/eks-blueprints": "^1.11.3",
     "aws-cdk-lib": "^2.67.0",
     "aws-cdk-modules": "git+https://github.com/panicboat/aws-cdk-modules.git",
+    "bcrypt": "^5.1.1",
     "constructs": "^10.1.267",
     "source-map-support": "^0.5.21"
   }
