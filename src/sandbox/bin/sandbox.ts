@@ -2,7 +2,6 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { SandboxStack } from '../lib/sandbox-stack';
-import { SandboxEksStack } from '../lib/sandbox-eks-stack';
 import { config as DevProps } from '../env/develop';
 
 const app = new cdk.App();
@@ -13,8 +12,6 @@ const env = {
   region: props.region,
 };
 const vpc = new SandboxStack(app, 'SandboxStack', { env });
-const eks = new SandboxEksStack(app, 'SandboxEksStack', { env, vpc: vpc.vpc });
-eks.addDependency(vpc);
 app.synth()
 
 cdk.Tags.of(app).add('owner', 'panicboat');
